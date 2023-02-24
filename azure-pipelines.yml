@@ -1,0 +1,60 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+stages:
+- stage: 
+  pool:
+    vmImage: windows-latest
+  jobs:
+  - job: backend_build
+    steps:
+    - task: UseDotNet@2
+      displayName: Sdk Install
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'
+    - task: NuGetCommand@2
+      displayName: Nuget Restore
+      inputs:
+        command: 'restore'
+        restoreSolution: 'coresearch/coresearch.sln'
+        feedsToUse: 'select'
+    - task: MSBuild@1
+      displayName: CoreSearch Build
+      inputs:
+        solution: 'coresearch/coresearch.sln'
+        platform: 'AnyCPU'
+        configuration: 'Release'
+    - task: PublishBuildArtifacts@1
+      displayName: Backend Artiafct Publish
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'Backend'
+        publishLocation: 'Container'
+- stage: 
+  pool:
+    vmImage: Ubuntu-latest
+  jobs:
+  - job: frontend_build
+    steps:
+    - task: Npm@1
+      displayName: Npm Install
+      inputs:
+        command: 'install'
+        workingDir: 'coresearch/Webserver'
+    - task: Npm@1
+      displayName: Npm Run and Build
+      inputs:
+        command: 'custom'
+        workingDir: 'coresearch/Webserver'
+        customCommand: 'run build'
+    - task: PublishBuildArtifacts@1
+      displayName: Frontend Artifact Publish
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'Frontend'
+        publishLocation: 'Container'
