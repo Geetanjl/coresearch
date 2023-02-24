@@ -23,12 +23,15 @@ stages:
         command: 'restore'
         restoreSolution: 'coresearch.sln'
         feedsToUse: 'select'
-    - task: MSBuild@1
-      displayName: CoreSearch Build
+    - task: DotNetCoreCLI@2
       inputs:
-        solution: 'coresearch.sln'
-        platform: 'Any CPU'
-        configuration: 'Release'
+        command: 'restore'
+        projects: 'coresearch/coresearch.sln'
+        feedsToUse: 'select'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: 'coresearch/coresearch.sln'
     - task: PublishBuildArtifacts@1
       displayName: Backend Artiafct Publish
       inputs:
