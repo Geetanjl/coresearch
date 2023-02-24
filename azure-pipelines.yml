@@ -26,12 +26,12 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'restore'
-        projects: 'coresearch/coresearch.sln'
+        projects: 'coresearch.sln'
         feedsToUse: 'select'
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
-        projects: 'coresearch/coresearch.sln'
+        projects: 'coresearch.sln'
     - task: PublishBuildArtifacts@1
       displayName: Backend Artiafct Publish
       inputs:
