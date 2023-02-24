@@ -27,7 +27,7 @@ stages:
       displayName: CoreSearch Build
       inputs:
         solution: 'coresearch.sln'
-        platform: 'AnyCPU'
+        platform: 'Any CPU'
         configuration: 'Release'
     - task: PublishBuildArtifacts@1
       displayName: Backend Artiafct Publish
